@@ -1,0 +1,5 @@
+This is the pipeline to extract walking parameters from IMU signals. The main pipeline file is FeatureExtractionPipeline.mlx 
+Important note:
+1. To be able to use this pipeline, you need walking segmentation files. If not, please open WalkSegmentation folder. 
+2. This pipeline uses segmented gait file as an input and calculates several output parameters. To see the list of output parameters please open Parameters.mat
+3. All MATLAB functions in this folder are necessary and keep all. 

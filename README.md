@@ -1,7 +1,9 @@
 # IMU-Clinical-Parameter-Extraction V1.0.0
-This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function.
+# Update in V 1.0.0:
+Walking feature extraction is added.
+#
 ## Objective
-This pipeline can process IMU signals and extract gait and balance parameters. 
+This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function. It can process IMU signals and extract gait and balance parameters. 
 ## Important 
 1. This pipeline is currently compatible with Xsens IMU sensors and requires sensor parameters such as "Position", "Acceleration", "Orientation", "JointAngle", "Velocity", and "AngularVelocity".
 2. This pipeline requires at least 8 IMU sensors placed on feet (or shanks), thighs, lumbar, trunk, and wrists. Having fewer sensors requires customization and turning off some feature extraction commands. 

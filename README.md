@@ -1,4 +1,4 @@
-# IMU-Clinical-Parameter-Extraction
+# IMU-Clinical-Parameter-Extraction V1.0.0
 This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function.
 ## Objective
 This pipeline can process IMU signals and extract gait and balance parameters. 

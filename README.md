@@ -1,6 +1,7 @@
-# IMU-Clinical-Parameter-Extraction V1.0.0
-# Update in V 1.0.0:
-Walking feature extraction is added.
+# IMU-Clinical-Parameter-Extraction V1.0.1
+# Update in V 1.0.1:
+Arm Swing Velocity and ROM has a different calculation now. 
+Plot inspection added to the main walking pipeline. 
 #
 ## Objective
 This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function. It can process IMU signals and extract gait and balance parameters. 

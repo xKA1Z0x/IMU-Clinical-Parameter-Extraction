@@ -1,5 +1,5 @@
 # IMU-Clinical-Parameter-Extraction V1.1.0
-# Update in V 1.1.0:
+# Update in V1.1.0:
 1. Cadence function in the Walk pipeline changed
 2. Stair pipeline added
 #

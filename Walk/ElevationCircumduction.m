@@ -1,4 +1,4 @@
-function [Exportparameters] = ElevationCircumduction(data, bodyside, Exportparameters)
+function Exportparameters = ElevationCircumduction(data, bodyside, Exportparameters)
     %calling the body side in a loop 
     for k = 1:numel(bodyside)
         s = data.subdata_out.Segmented.(bodyside{k});

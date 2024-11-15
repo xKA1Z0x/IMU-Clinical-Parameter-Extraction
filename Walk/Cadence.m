@@ -5,7 +5,7 @@ function Exportparameters = Cadence(data, bodyside, Exportparameters)
        %loop through each stride for the current body side
        for i = 1:size(s.ACC_seg, 1)
            %calculate cadence for each stride and assign to the table
-           Exportparameters{i, k+0} = 1/length(s.ACC_seg{i,1});
+           Exportparameters{i, k+0} = (60^2)/length(s.ACC_seg{i,1});
        end
    end
    

@@ -1,5 +1,8 @@
-# IMU-Clinical-Parameter-Extraction V1.1.0
-# Update in V1.1.0:
+# IMU-Clinical-Parameter-Extraction V1.1.1
+# Update in V1.1.1:
+1. Functions "SSSD" and "Arm" in the Walk pipeline were debugged and replaced
+
+# Major update in V1.1.0:
 1. Cadence function in the Walk pipeline changed
 2. Stair pipeline added
 #

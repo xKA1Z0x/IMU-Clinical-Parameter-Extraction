@@ -80,7 +80,7 @@ function [Exportparameters] = SSSD(data, bodyside, footcontact, Exportparameters
     end
     
     % 2. After gathering the stance times for both sides, calculate single and double support times
-    for i = 1:size(leftStanceTimes, 1)
+    for i = 1: min(size(leftStanceTimes, 1), size(rightStanceTimes,1))
         % Extract left and right stance start and end times for current stride
         left_start_idx = leftStanceTimes(i, 1);
         left_end_idx = leftStanceTimes(i, 2);

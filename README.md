@@ -1,10 +1,10 @@
-# IMU-Clinical-Parameter-Extraction V1.1.1
-# Update in V1.1.1:
-1. Functions "SSSD" and "Arm" in the Walk pipeline were debugged and replaced
+# IMU-Clinical-Parameter-Extraction V1.2.0
 
-# Major update in V1.1.0:
-1. Cadence function in the Walk pipeline changed
-2. Stair pipeline added
+# Major update in V1.2.0:
+1. Orientation Correction Function created and added to both Walk and Stairs pipelines
+2. Cadence function for stairs now have ascending and descending calculations separately
+3. Stairs main pipeline asks for alternating and non-alternating gait for ascending and descending parts separately.
+   
 #
 ## Objective
 This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function. It can process IMU signals and extract gait and balance parameters. 

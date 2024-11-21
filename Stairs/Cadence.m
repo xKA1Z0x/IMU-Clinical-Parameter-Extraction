@@ -1,14 +1,45 @@
-function ExportparametersSTAIRS = Cadence(processedData, bodyside, Alternate, ExportparametersSTAIRS)
+function ExportparametersSTAIRS = Cadence(processedData, bodyside, AscAlternate, DscAlternate, ExportparametersSTAIRS)
     %Calling the body side in a loop
-    for k = 1:numel(bodyside)
-        s = processedData.(bodyside{k});
-        %loop through each stride for the current body side and climbing
-        %phase
-        for i = 1:size(s.ACC,1)
-            ExportparametersSTAIRS{i, k} = length(s.ACC{i, 1})/60;
-            if Alternate == 1
+    if AscAlternate == 1
+        for k = 1:2
+            s = processedData.(bodyside{k});
+            %loop through each stride for the current body side and climbing
+            %phase
+            for i = 1:size(s.ACC,1)
+                ExportparametersSTAIRS{i, k} = length(s.ACC{i, 1})/60;
                 ExportparametersSTAIRS{i, k+6} = 2*(60 ^ 2)/length(s.ACC{i, 1});
-            elseif Alternate == 0
+            end
+        end
+    end
+    if AscAlternate == 0
+        for k = 1:2
+            s = processedData.(bodyside{k});
+            %loop through each stride for the current body side and climbing
+            %phase
+            for i = 1:size(s.ACC,1)
+                ExportparametersSTAIRS{i, k} = length(s.ACC{i, 1})/60;
+                ExportparametersSTAIRS{i, k+6} = (60 ^ 2)/length(s.ACC{i, 1});
+            end
+        end
+    end
+    if DscAlternate == 1
+        for k = 3:4
+            s = processedData.(bodyside{k});
+            %loop through each stride for the current body side and climbing
+            %phase
+            for i = 1:size(s.ACC,1)
+                ExportparametersSTAIRS{i, k} = length(s.ACC{i, 1})/60;
+                ExportparametersSTAIRS{i, k+6} = 2*(60 ^ 2)/length(s.ACC{i, 1});
+            end
+        end
+    end
+    if DscAlternate == 0
+        for k = 3:4
+            s = processedData.(bodyside{k});
+            %loop through each stride for the current body side and climbing
+            %phase
+            for i = 1:size(s.ACC,1)
+                ExportparametersSTAIRS{i, k} = length(s.ACC{i, 1})/60;
                 ExportparametersSTAIRS{i, k+6} = (60 ^ 2)/length(s.ACC{i, 1});
             end
         end

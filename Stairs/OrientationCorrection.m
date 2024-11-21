@@ -26,7 +26,7 @@ function data = OrientationCorrection(data, columnIndices, minProminence, promin
         % Process the peaks
         for i = 1:n
             rangeStart = peakIndices(i, 1) + 1;
-            rangeEND = peakIndices(n, 1);
+            rangeEND = length(result);
             referenceIndex = peakIndices(i, 1);
             
             if peakIndices(i, 2) == 0

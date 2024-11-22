@@ -14,14 +14,15 @@ velocity.csv
 Some important points to keep in mind:
 
 1. The main code is also calling a the funtion called 'extract_columns_v2.m', which is extracting only the time columns and the actual information content of each csv file
+   The function has also a previous version, extracting only a limited infromation from the files (e.g., upper limb is not extracted). Refer to 'extract_columns.m' and 'columns_name_legend.txt' to access the code for a restricted extraction and the specific columns extracted by the code, respectively. To be noted: the restricted file version is not performing the JointAngle axes renaming (see point 5)
 
-2. In the case of the JointAngle.csv file, a type was discovered in the P2C and Jungle datasets. In fact, the direct export of the sensor is reporting as coorinates the movements of the joints, not the axis, i.e.,flexion/extension, adduction/abduction, and internal/external rotation. In an intermediate process, these moevement were erroneously allocated to the axes coordinates. Hence, an axis inversion is perormed between lines 135-143 of the code. If this is not a typo present in your dataset, make sure to comment these lines
+3. In the case of the JointAngle.csv file, a type was discovered in the P2C and Jungle datasets. In fact, the direct export of the sensor is reporting as coorinates the movements of the joints, not the axis, i.e.,flexion/extension, adduction/abduction, and internal/external rotation. In an intermediate process, these moevement were erroneously allocated to the axes coordinates. Hence, an axis inversion is perormed between lines 135-143 of the code. If this is not a typo present in your dataset, make sure to comment these lines
   
-3. The global coordinate system of the sensors is the following: z - vertical axis, x - axis in the direction of walk (antero-posterior), y - medio-lateral
+4. The global coordinate system of the sensors is the following: z - vertical axis, x - axis in the direction of walk (antero-posterior), y - medio-lateral
 
-4. The code is entering the specific P2C \ Jungle data\folders architecture, i.e., #condition#\#participant#\#task#\Sensor Data\Xsens. It is also flexible to the following possible architectures, #condition#\#participant#\#task#\Sensor_Data\Xsens or #condition#\#participant#\#task#\Xsens. However, if the architectrure type is different than one of these, you should modify the initial for cycles of the code (lines 42-62)
+5. The code is entering the specific P2C \ Jungle data\folders architecture, i.e., #condition#\#participant#\#task#\Sensor Data\Xsens. It is also flexible to the following possible architectures, #condition#\#participant#\#task#\Sensor_Data\Xsens or #condition#\#participant#\#task#\Xsens. However, if the architectrure type is different than one of these, you should modify the initial for cycles of the code (lines 42-62)
 
-5. All variables that the user could possibly change are stored in the initial 'Control Panel' section. These are:
+6. All variables that the user could possibly change are stored in the initial 'Control Panel' section. These are:
 
 avoid_cond _ string or vector of strings  %write here specific folder of conditions you do not want this code to process
 avoid_part _ string or vector of strings  %write here specific folder of participants you do not want this code to process

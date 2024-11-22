@@ -1,0 +1,11 @@
+Versions of the code:
+
+_v1: initial code borrowed from Francesco (source: \\fs2.smpp.local\RTO\STARS\Inpatient Study\Analysis\STARS_Inpatient_Step03_XSens_GaitSegmentation_v1), added with a few comments
+
+_v2: code manipulated to accept P2C input
+     also, removed the cut over the first 2 meters
+     in addition, the modality the user can interact for peak detection is slightly extended
+     lastly, different processes for manual peak detection are inserted for the 10MWT wrt 2MWT and 6MWT
+
+_v2 - REMOTE VERSION: this is the version created for the volunteed (LW). The content is the exact same as v2, but in this case the user has to manually select the files to process
+ (i.e., all the for cycles automatically entering the folder architecture of the dataset are removed)

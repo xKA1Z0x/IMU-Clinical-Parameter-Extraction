@@ -14,7 +14,7 @@ velocity.csv
 Some important points to keep in mind:
 
 1. The main code is also calling a the funtion called 'extract_columns_v2.m', which is extracting only the time columns and the actual information content of each csv file
-   The function has also a previous version, extracting only a limited infromation from the files (e.g., upper limb is not extracted). Refer to 'extract_columns.m' and 'columns_name_legend.txt' to access the code for a restricted extraction and the specific columns extracted by the code, respectively. To be noted: the restricted file version is not performing the JointAngle axes renaming (see point 5)
+   The function has also a previous version, extracting only a limited infromation from the files (e.g., upper limb is not extracted). Refer to 'extract_columns.m', 'code_versions_logging.txt', and 'columns_name_legend.txt' to access the code for a restricted extraction, a logging file with the main differences between the codes, and the specific columns extracted by the code, respectively. To be noted: the restricted file version is not performing the JointAngle axes renaming (see point 5)
 
 3. In the case of the JointAngle.csv file, a type was discovered in the P2C and Jungle datasets. In fact, the direct export of the sensor is reporting as coorinates the movements of the joints, not the axis, i.e.,flexion/extension, adduction/abduction, and internal/external rotation. In an intermediate process, these moevement were erroneously allocated to the axes coordinates. Hence, an axis inversion is perormed between lines 135-143 of the code. If this is not a typo present in your dataset, make sure to comment these lines
   

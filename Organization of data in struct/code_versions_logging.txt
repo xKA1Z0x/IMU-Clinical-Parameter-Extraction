@@ -1,0 +1,7 @@
+extract_columns:
+
+1: extract_columns.m
+in this function we only extract the variables FL is extracting from his file, preserving the same order
+
+2: extract_columns_v2.m
+in this code, we extract first the columns FL extracted, preserving the same order, then we add all the rest of the information, concerning the other body segments. Additionally, given the high number of variables, we cadd to the struct a brench 'labels', where all the sorted names of the columns are reported

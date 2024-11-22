@@ -1,0 +1,63 @@
+    % Positions
+    Pos(:,1:3) = position(:,1:3);	% Pelvis
+    Pos(:,4:6) = RF(:,:);        	% Right Foot
+    Pos(:,7:9) = LF(:,:);        	% Left Foot
+    
+    % Joint Angles
+    JA(:,1:3)   = Pel(:,:)*180/pi;	% Pelvis
+    JA(:,4:6)   = joint(:,1:3);   	% Torso
+    JA(:,7:9)   = joint(:,43:45); 	% R hip
+    JA(:,10:12) = joint(:,46:48);	% R knee
+    JA(:,13:15) = joint(:,49:51);	% R ankle
+    JA(:,16:18) = joint(:,55:57); 	% L hip
+    JA(:,19:21) = joint(:,58:60);	% L knee
+    JA(:,22:24) = joint(:,61:63); 	% L ankle
+    
+    % Acceleration
+    ACC(:,1:3) = acc(:,1:3);     	% Pelvis
+    ACC(:,4:6) = acc(:,4:6);     	% Torso
+    ACC(:,7:9) = acc(:,46:48);   	% R thigh
+    ACC(:,10:12) = acc(:,49:51); 	% R shank
+    ACC(:,13:15) = acc(:,52:54); 	% R foot
+    ACC(:,16:18) = acc(:,58:60); 	% L thigh
+    ACC(:,19:21) = acc(:,61:63); 	% L shank
+    ACC(:,22:24) = acc(:,64:66);	% L foot
+    
+    % Acceleration sensor (??)
+    ACC_S(:,1:3)    = acc_sensor(:,1:3);  	% Pelvis
+    ACC_S(:,4:6)    = acc_sensor(:,4:6);  	% R thigh
+    ACC_S(:,7:9)    = acc_sensor(:,7:9);  	% R shank
+    ACC_S(:,10:12)  = acc_sensor(:,10:12); 	% R foot
+    ACC_S(:,13:15)  = acc_sensor(:,13:15); 	% L thigh
+    ACC_S(:,16:18)  = acc_sensor(:,16:18); 	% L shank
+    ACC_S(:,19:21)  = acc_sensor(:,19:21);	% L foot
+    
+    % Angular velocity
+    AV(:,1:3)   = av(:,1:3);   	% Pelvis
+    AV(:,4:6)   = av(:,4:6);   	% Torso
+    AV(:,7:9)   = av(:,46:48); 	% R thigh
+    AV(:,10:12) = av(:,49:51);	% R shank
+    AV(:,13:15) = av(:,52:54);	% R foot
+    AV(:,16:18) = av(:,58:60);	% L thigh
+    AV(:,19:21) = av(:,61:63);	% L shank
+    AV(:,22:24) = av(:,64:66);	% L foot
+    
+    % Linear velocity
+    V(:,1:3)    = vel(:,1:3); 	% Pelvis
+    V(:,4:6)    = vel(:,4:6);  	% Torso
+    V(:,7:9)    = vel(:,46:48);	% R thigh
+    V(:,10:12)  = vel(:,49:51);	% R shank
+    V(:,13:15)  = vel(:,52:54);	% R foot
+    V(:,16:18)  = vel(:,58:60);	% L thigh
+    V(:,19:21)  = vel(:,61:63);	% L shank
+    V(:,22:24)  = vel(:,64:66);	% L foot
+    
+    % Orientation in quaternions
+    Q(:,1:4)    = ori(:,1:4);  	% PE
+    Q(:,5:8)    = ori(:,17:20);	% TO
+    Q(:,9:12)   = ori(:,61:64);	% RU
+    Q(:,13:16)  = ori(:,65:68);	% RL
+    Q(:,17:20)  = ori(:,69:72);	% RF
+    Q(:,21:24)  = ori(:,77:80);	% LU
+    Q(:,25:28)  = ori(:,81:84);	% LL
+    Q(:,29:32)  = ori(:,85:88);	% LF

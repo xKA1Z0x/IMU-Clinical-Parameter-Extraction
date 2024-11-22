@@ -5,3 +5,5 @@ in this function we only extract the variables FL is extracting from his file, p
 
 2: extract_columns_v2.m
 in this code, we extract first the columns FL extracted, preserving the same order, then we add all the rest of the information, concerning the other body segments. Additionally, given the high number of variables, we cadd to the struct a brench 'labels', where all the sorted names of the columns are reported
+
+the problem with JointAngle axes is also solved. TO BE NOTED: the axes are correctly modified in the struct, NOT in the csv files

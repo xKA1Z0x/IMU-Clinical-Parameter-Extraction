@@ -12,14 +12,18 @@ clear all
 
 %% control panel - settings
 avoid_cond=["Control", "LL", "PD"];  %write here specific folder of conditions you do not want this code to process
-avoid_part=[""];  %write here specific folder of participants you do not want this code to process
+avoid_part=["CVA01", "CVA02", "CVA03", "CVA04", "CVA05", "CVA06", "CVA07", "CVA08", "CVA09", "CVA10", "CVA12", "CVA13", "CVA14", "CVA15", "CVA16", "CVA17", "CVA18", "CVA19", "CVA20", "CVA21", "CVA22", "CVA23", "CVA24", "CVA25", "CVA26", "CVA27", "CVA28", "CVA29", "CVA30"];  %write here specific folder of participants you do not want this code to process
 avoid_tasks=[""];  %write here specific folder of tasks or trials you do not want this code to process
+
+nned_quat2eul_conversion=1;   %0/1 flag activating or not the conversion from quaternions to euler angles
+orientation_type='XYZ';  %gloabl orientation of the P2C / Jungle databases (Xsens based)
+
 
 %P2C
 initial_folder= "Y:\P2C\P2C_Database_Segmented - Database paper version";
 %initial_folder="\\fs2\RTO\P2C\P2C_Database_Segmented - Database paper version"; %direct the code to a specific folder, without interactively ask to the user
 %Jungle
-% initial_folder="\\fs2\RTO\P2C\Amazon Data\General_Movement_Dataset";
+initial_folder="\\fs2\RTO\P2C\Amazon Data\General_Movement_Dataset";
 verbosity=1; %flag for turning on and off the verbosity of the code. 0=the code is not outputting any info; 1= the code is providing info on the portion under processing
 %% positioning in the proper folder and selecting the files
 addpath('\\fs2.smpp.local\rto\STARS\Inpatient Study\Analysis\Matlab_function');
@@ -110,12 +114,25 @@ for c=1:length(conditions) %for each condition folder available
                                 addpath (folderanalysis)
                                 [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
                                 
+                                %adding orientation to the struct
+                                filename="orientation.csv";
+                                col_interest=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
+                                    "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
+                                    "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
+                                addpath (folderanalysis)
+                                if nned_quat2eul_conversion==1
+                                    filename_new= orientation_conversion(filename,orientation_type);
+                                else filename_new=filename;
+                                end
+                                [time, data_extracted, labels]=extract_columns_v2(filename_new,col_interest, verbosity);
+                                xsens_ord.Q=data_extracted;
+                                lab.Q=labels;
                                 
                                 %%%%%%%%%%%%%part for the pelvis _ source: \\fs2.smpp.local\rto\STARS\Inpatient Study\Analysis\main_STARS_Inpatient_Step01c_XSens_Import_v5.m%%%%%%%%%%
                                 % To get the foot trajectory w.r.t Pelvis
-                                ori=readmatrix("orientation.csv");
-                                ori_tab=readtable("orientation.csv");
-                                ori_tab_names=string(ori_tab.Properties.VariableNames);
+                                ori=xsens_ord.Q; %readmatrix("orientation.csv");
+%                                 ori_tab=readtable("orientation.csv");
+                                ori_tab_names=string(lab.Q);
                                 if ori_tab_names(2)=="time" && ori_tab_names(3)=="ms"
                                     ori=ori(:,4:end);
                                 end
@@ -182,16 +199,7 @@ for c=1:length(conditions) %for each condition folder available
                                 xsens_ord.V=data_extracted;
                                 lab.V=labels;
                                 
-                                %adding orientation to the struct
-                                filename="orientation.csv";
-                                col_interest=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
-                                    "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
-                                    "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
-                                addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
-                                xsens_ord.Q=data_extracted;
-                                lab.Q=labels;
-                                
+                                                               
                                 xsens_ord.Labels=lab;
                                 
                                 save((p_name+ "_"+ tt_name + "_Extracted.mat"), 'xsens_ord');
@@ -205,4 +213,4 @@ for c=1:length(conditions) %for each condition folder available
     end
 end
 
-writematrix(incomplete_data, "missing_data.xlsx");
+writematrix(incomplete_data, strcat(initial_folder,"\missing_data.xlsx"));

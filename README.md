@@ -1,9 +1,7 @@
-# IMU-Clinical-Parameter-Extraction V1.2.0
+# IMU-Clinical-Parameter-Extraction V1.3.0
 
-# Major update in V1.2.0:
-1. Orientation Correction Function created and added to both Walk and Stairs pipelines
-2. Cadence function for stairs now have ascending and descending calculations separately
-3. Stairs main pipeline asks for alternating and non-alternating gait for ascending and descending parts separately.
+# Major update in V1.3.0:
+1. miniBESTest Pipeline added
    
 #
 ## Objective

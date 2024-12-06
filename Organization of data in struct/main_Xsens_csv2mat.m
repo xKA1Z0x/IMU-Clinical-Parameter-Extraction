@@ -15,9 +15,16 @@ avoid_cond=["Control", "LL", "PD"];  %write here specific folder of conditions y
 avoid_part=["CVA01", "CVA02", "CVA03", "CVA04", "CVA05", "CVA06", "CVA07", "CVA08", "CVA09", "CVA10", "CVA12", "CVA13", "CVA14", "CVA15", "CVA16", "CVA17", "CVA18", "CVA19", "CVA20", "CVA21", "CVA22", "CVA23", "CVA24", "CVA25", "CVA26", "CVA27", "CVA28", "CVA29", "CVA30"];  %write here specific folder of participants you do not want this code to process
 avoid_tasks=[""];  %write here specific folder of tasks or trials you do not want this code to process
 
-nned_quat2eul_conversion=1;   %0/1 flag activating or not the conversion from quaternions to euler angles
+need_quat2eul_conversion=1;   %0/1 flag activating or not the conversion from quaternions to euler angles
 orientation_type='XYZ';  %gloabl orientation of the P2C / Jungle databases (Xsens based)
 
+label_inversion=1;  %0/1 flag activating or not the inversion of the labels in the joint angle data
+
+file_sheet="f"; % if "f", it means the data is derived from different files, one for each data type (AJ, V, ACC, ...). if "s", it means there is a unique excel file with multiple sheets
+if file_sheet=="s"
+    need_quat2eul_conversion=0;
+    label_inversion=0;
+end
 
 %P2C
 initial_folder= "Y:\P2C\P2C_Database_Segmented - Database paper version";
@@ -77,7 +84,7 @@ for c=1:length(conditions) %for each condition folder available
                         sensors=dir(cd);
                         
                         %check for presence of all the data files
-                        if length(sensors)<2
+                        if length(sensors)<2 && file_sheet=="f"
                             if verbosity==1
                                 fprintf("\n Incomplete data");
                             end
@@ -91,40 +98,65 @@ for c=1:length(conditions) %for each condition folder available
                                     who=[who; list_files(find(list_files==string(sensors(j).name)))];
                                 end
                             end
-                            if sum_missing>0 %case in which some of the data files are missing
+                            if sum_missing>0 && file_sheet=="f" %case in which some of the data files are missing
                                 if verbosity==1
                                     fprintf("\n Incomplete data");
                                 end
                                 incomplete_data=[incomplete_data; [string(cd), join(who, " - ")]];
                             else
+                                if file_sheet=="s"
+                                    fileInfo = dir(fullfile(pwd, '*.xlsx'));
+                                end
+
                                 %adding position to the struct
-                                filename="position.csv";
+                                if file_sheet=="f"
+                                    filename="position.csv"; 
+                                    sheet="";
+                                else
+                                    sheet="Segment Position";
+                                    filename=fileInfo;
+                                end
+                                 
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "RightFoot_x", "RightFoot_y", "RightFoot_z", "LeftFoot_x", "LeftFoot_y", "LeftFoot_z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
                                 xsens_ord.time=time;
                                 xsens_ord.Pos=data_extracted;
                                 lab.Pos=labels;
                                 
                                 %adding joint angles to the struct
-                                filename="jointAngle.csv";
+                                if file_sheet=="f"
+                                    filename="jointAngle.csv"; 
+                                    sheet="";
+                                else
+                                    sheet="Joint Angles XZY";
+                                    filename=fileInfo;
+                                end
+
                                 col_interest=["jL5S1_x", "jL5S1_y", "jL5S1_z", ...
                                     "jRightHip_x", "jRightHip_y",	"jRightHip_z",	"jRightKnee_x",	"jRightKnee_y",	"jRightKnee_z",	"jRightAnkle_x", "jRightAnkle_y", "jRightAnkle_z", ...
                                     "jLeftHip_x", "jLeftHip_y",	"jLeftHip_z",	"jLeftKnee_x",	"jLeftKnee_y",	"jLeftKnee_z",	"jLeftAnkle_x",	"jLeftAnkle_y",	"jLeftAnkle_z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
                                 
                                 %adding orientation to the struct
-                                filename="orientation.csv";
+                                if file_sheet=="f"
+                                    filename="orientation.csv";
+                                    sheet="";
+                                else
+                                    sheet="Segment Orientation - Euler";
+                                    filename=fileInfo;
+                                end
+                                 
                                 col_interest=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
                                     "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
                                     "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
                                 addpath (folderanalysis)
-                                if nned_quat2eul_conversion==1
+                                if need_quat2eul_conversion==1
                                     filename_new= orientation_conversion(filename,orientation_type);
                                 else filename_new=filename;
                                 end
-                                [time, data_extracted, labels]=extract_columns_v2(filename_new,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename_new, sheet, file_sheet, col_interest, verbosity);
                                 xsens_ord.Q=data_extracted;
                                 lab.Q=labels;
                                 
@@ -150,52 +182,82 @@ for c=1:length(conditions) %for each condition folder available
                                 labels=["Pelvis_x", "Pelvis_y", "Pelvis_z", labels];
                                 
                                 %%%PART ONLY FOR P2C DATASET, WITH COLUMN NAME CHANGE
-                                %comment if this problem does not apply
-                                old_labels=labels;
-                                oldy=find(endsWith(old_labels,"_y")==1);
-                                oldz=find(endsWith(old_labels,"_z")==1);
-                                labels(oldy)=replace(labels(oldy), "_y", "_z");
-                                labels(oldz)=replace(labels(oldz), "_z", "_y");
+                                %deactivate the flag if this problem does not apply
+                                if label_inversion==1
+                                    old_labels=labels;
+                                    oldy=find(endsWith(old_labels,"_y")==1);
+                                    oldz=find(endsWith(old_labels,"_z")==1);
+                                    labels(oldy)=replace(labels(oldy), "_y", "_z");
+                                    labels(oldz)=replace(labels(oldz), "_z", "_y");
+                                end
                                 %%%%%%%
                                 lab.JA=labels;
                                 
                                 %adding acceleration to the struct
-                                filename="acceleration.csv";
+                                if file_sheet=="f"
+                                    filename="acceleration.csv"; 
+                                    sheet="";
+                                else
+                                    sheet= "Segment Acceleration";
+                                    filename=fileInfo;
+                                end
+                                 
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
                                 xsens_ord.ACC=data_extracted;
                                 lab.ACC=labels;
                                 
                                 %adding sensor acceleration to the struct
-                                filename="sensorFreeAcceleration.csv";
+                                if file_sheet=="f"
+                                    filename="sensorFreeAcceleration.csv";
+                                    sheet="";
+                                else
+                                    sheet="Sensor Free Acceleration";
+                                    filename=fileInfo;
+                                end
+                                 
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
                                 xsens_ord.ACC_S=data_extracted;
                                 lab.ACC_S=labels;
                                 
                                 %adding angular velocity to the struct
-                                filename="angularVelocity.csv";
+                                if file_sheet=="f"
+                                    filename="angularVelocity.csv";
+                                    sheet="";
+                                else
+                                    sheet= "Segment Angular Velocity";
+                                    filename=fileInfo;
+                                end
+                                 
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
                                 xsens_ord.AV=data_extracted;
                                 lab.AV=labels;
                                 
                                 %adding velocity to the struct
-                                filename="velocity.csv";
+                                if file_sheet=="f"
+                                    filename="velocity.csv";
+                                    sheet="";
+                                else
+                                    sheet="Segment Velocity";
+                                    filename=fileInfo;
+                                end
+                                 
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename,col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
                                 xsens_ord.V=data_extracted;
                                 lab.V=labels;
                                 

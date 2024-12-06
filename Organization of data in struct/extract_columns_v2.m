@@ -1,14 +1,13 @@
-function [time,data_extracted, labels] = extract_columns_v2(filename,col_interest, verbosity)
+function [time,data_extracted, labels] = extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity)
 %this function is used to extract the specific columns fromt he csv file of
 %each Xsens file type
 
 %input:
-%filename: name of the file from which we want to extract the data. path is
-%not required - string
-%col_interest: names of the columns we want to extract from the Xsens file -
-%string vector
-%verbosity: flag variable 0\1 indicating if we want to receive messages in
-%case of failure
+%filename: name of the file from which we want to extract the data. path is not required - string
+%sheet: in case of data derived from one unique file, this provides the name of the sheet from which to extract the data - string
+%file_sheet: variable "f" or "s" indicating if the data needs to be retrieved from multiple files or from different sheets of one unique file, respectively
+%col_interest: names of the columns we want to extract from the Xsens file- string vector
+%verbosity: flag variable 0\1 indicating if we want to receive messages in case of failure
 
 %output:
 %time: tme column, it should be common among all the Xsens files - vector
@@ -17,7 +16,11 @@ function [time,data_extracted, labels] = extract_columns_v2(filename,col_interes
 %doubles
 % labels: names of the variables extracted - string vector
 
-raw_data=readtable(filename);
+if file_sheet=="f"
+    raw_data=readtable(filename);
+elseif file_sheet=="s"
+    raw_data=readtable(filename, 'Sheet',sheet);
+end
 
 if isempty(raw_data)
     if verbosity==1

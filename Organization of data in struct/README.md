@@ -36,4 +36,5 @@ verbosity _ 0/1 integer %flag for turning on and off the verbosity of the code. 
 
 need_quat2eul_conversion _ 0/1 integer   %0/1 flag activating or not the conversion from quaternions to euler angles
 orientation_type='XYZ' _string  %gloabl orientation of the P2C / Jungle databases (Xsens based)
-
+label_inversion=1;  %0/1 flag activating or not the inversion of the labels in the joint angle data
+file_sheet="f"; % if "f", it means the data is derived from different files, one for each data type (AJ, V, ACC, ...). if "s", it means there is a unique excel file with multiple sheets

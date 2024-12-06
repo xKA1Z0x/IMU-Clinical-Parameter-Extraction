@@ -39,6 +39,8 @@ else
     all_columns=1:size(raw_data, 2);
     if col_names(2)=="time" && col_names(3)=="ms"
         all_columns(1:3)=[];
+    elseif col_names(1)=="Frames"
+        all_columns(1)=[];
     end
     remaining_columns=setdiff(all_columns, index_cols);
     data_extracted=[data_extracted, table2array(raw_data(:,remaining_columns))];

@@ -11,9 +11,9 @@ clear all
 %additionally, an excel incomplete_data file will be saved in the same folder of the cose
 
 %% control panel - settings
-avoid_cond=["Control", "LL", "PD"];  %write here specific folder of conditions you do not want this code to process
-avoid_part=["CVA01", "CVA02", "CVA03", "CVA04", "CVA05", "CVA06", "CVA07", "CVA08", "CVA09", "CVA10", "CVA12", "CVA13", "CVA14", "CVA15", "CVA17", "CVA11", "CVA18", "CVA19", "CVA20", "CVA21", "CVA22", "CVA23", "CVA24", "CVA25", "CVA26", "CVA27", "CVA28", "CVA29"];  %write here specific folder of participants you do not want this code to process
-avoid_tasks=[""];  %write here specific folder of tasks or trials you do not want this code to process
+avoid_cond=["Control", "CVA", "PD"];  %write here specific folder of conditions you do not want this code to process
+avoid_part=["LL01", "LL02", "LL03","LL04","LL05", "LL06", "LL07", "LL08", "LL09", "LL10", "LL11","LL14", "LL15", "LL16", "LL17", "LL18", "LL19", "LL20"];  %write here specific folder of participants you do not want this code to process
+avoid_tasks=["MINIBEST", "10MWT", "2MWT"];  %write here specific folder of tasks or trials you do not want this code to process
 
 need_quat2eul_conversion=0;   %0/1 flag activating or not the conversion from quaternions to euler angles
 orientation_type='XYZ';  %gloabl orientation of the P2C / Jungle databases (Xsens based)
@@ -52,7 +52,7 @@ lab=[];
 
 for c=1:length(conditions) %for each condition folder available
     c_name=conditions(c).name;
-    if ~contains(c_name, '.') && isempty(find(avoid_cond==string(c_name)))  %check that the file name c_name is a folder for the conditions and not sparse files with .xxx extension + check that only the desired consitions are selected
+    if ~contains(c_name, '.') && ~any(cellfun(@(p) contains(c_name, p), avoid_cond))  %check that the file name c_name is a folder for the conditions and not sparse files with .xxx extension + check that only the desired consitions are selected
         if verbosity==1
             fprintf("Processing condition: " + c_name);
         end
@@ -61,7 +61,7 @@ for c=1:length(conditions) %for each condition folder available
         participants=dir(cd);
         for p=1:length(participants)
             p_name=participants(p).name;
-            if ~contains(p_name, '.') && isempty(find(avoid_part==string(p_name))) %check that the file name p_name is a folder for the participant and not sparse files with .xxx extension + check that only the desired participants are selected
+            if ~contains(p_name, '.') && ~any(cellfun(@(p) contains(p_name, p), avoid_part)) %check that the file name p_name is a folder for the participant and not sparse files with .xxx extension + check that only the desired participants are selected
                 if verbosity==1
                     fprintf("\n Processing participant: " + p_name);
                 end
@@ -70,7 +70,7 @@ for c=1:length(conditions) %for each condition folder available
                 tasktrials=dir(cd);
                 for tt=1:length(tasktrials) %for each of the files contained
                     tt_name=tasktrials(tt).name;
-                    if ~contains(tt_name, '.') && isempty(find(avoid_tasks==string(tt_name))) %check that the file name tt_name is a folder for the participant and not sparse files with .xxx extension + check that only the desired tasks and trials are selected
+                    if ~contains(tt_name, '.') && ~any(cellfun(@(p) contains(tt_name, p), avoid_tasks)) %check that the file name tt_name is a folder for the participant and not sparse files with .xxx extension + check that only the desired tasks and trials are selected
                         if verbosity==1
                             fprintf("\n Processing task and trial: " + tt_name);
                         end

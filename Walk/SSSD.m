@@ -53,8 +53,14 @@ function [Exportparameters] = SSSD(data, bodyside, footcontact, Exportparameters
             end
             
             % Find where 1 changes to 0 (stance to swing transition)
-            idx_change = find(diff(trimmedstride) == -1) + idx_start;
-            
+            % Find where 1 changes to 0 (stance to swing transition)
+            idx_changes = find(diff(trimmedstride) == -1) + idx_start; % Find all transitions
+            if isempty(idx_changes)
+                idx_change = 0; % No transition found
+            else
+                idx_change = idx_changes(end); % Choose the last transition
+            end
+
             % Store stance start and stance-to-swing transition points
             if k == 1
                 leftStanceTimes(i, :) = [idx_start, idx_change]; 
@@ -64,12 +70,13 @@ function [Exportparameters] = SSSD(data, bodyside, footcontact, Exportparameters
             
             % Calculate stride time (from idx_start to idx_end)
             stridetime = (footcontacttime(idx_end) - footcontacttime(idx_start)) / 1000;
-            
-            % Calculate stance time (from idx_start to idx_change)
-            stancetime = (footcontacttime(idx_change) - footcontacttime(idx_start)) / 1000;
-            
-            % Calculate swing time (from idx_change to idx_end)
-            swingtime = (footcontacttime(idx_end) - footcontacttime(idx_change)) / 1000;
+            if idx_change == 0
+                stancetime = 0;
+                swingtime = 0;
+            else
+                stancetime = (footcontacttime(idx_change) - footcontacttime(idx_start)) / 1000;
+                swingtime = (footcontacttime(idx_end) - footcontacttime(idx_change)) / 1000;
+            end
             
             % Calculate stance length (%GCT)
             Exportparameters{i, k+3} = (stancetime / stridetime) * 100;
@@ -82,37 +89,44 @@ function [Exportparameters] = SSSD(data, bodyside, footcontact, Exportparameters
     % 2. After gathering the stance times for both sides, calculate single and double support times
     for i = 1: min(size(leftStanceTimes, 1), size(rightStanceTimes,1))
         % Extract left and right stance start and end times for current stride
-        left_start_idx = leftStanceTimes(i, 1);
-        left_end_idx = leftStanceTimes(i, 2);
-        right_start_idx = rightStanceTimes(i, 1);
-        right_end_idx = rightStanceTimes(i, 2);
-        
-        % Calculate double support time by identifying overlapping indices
-        double_support_start_idx = max(left_start_idx, right_start_idx);  % When both legs are in stance
-        double_support_end_idx = min(left_end_idx, right_end_idx);        % When one leg leaves stance
-        double_support_time = max(0, footcontacttime(double_support_end_idx) - footcontacttime(double_support_start_idx)) / 1000;
-        
-        % Calculate stride time as reference for percentages
-        stride_start = min(footcontacttime(left_start_idx), footcontacttime(right_start_idx));
-        stride_end = max(footcontacttime(left_end_idx), footcontacttime(right_end_idx));
-        stridetime = (stride_end - stride_start) / 1000;
-        
-        % Calculate stance time as a percentage of gait cycle time for each leg
-        left_stance_pct = Exportparameters{i, 4};  % Already calculated as (stancetime / stridetime) * 100 for left leg
-        right_stance_pct = Exportparameters{i, 5}; % Already calculated as (stancetime / stridetime) * 100 for right leg
-        
-        % Calculate double support %GCT
-        double_support_pct = (double_support_time / stridetime) * 100;
-        Exportparameters{i, 13} = double_support_pct;  % Double Support L %GCT
-        Exportparameters{i, 14} = double_support_pct;  % Double Support R %GCT
-        
-        % Calculate single support %GCT as difference between stance %GCT and double support %GCT
-        left_single_support_pct = left_stance_pct - double_support_pct;
-        right_single_support_pct = right_stance_pct - double_support_pct;
-        
-        % Store single support times as percentages of the gait cycle time
-        Exportparameters{i, 10} = left_single_support_pct;  % Single Support L %GCT
-        Exportparameters{i, 11} = right_single_support_pct; % Single Support R %GCT
+        if leftStanceTimes(i, 2) == 0 || rightStanceTimes(i, 2) == 0
+            Exportparameters{i, 13} = 0;
+            Exportparameters{i, 14} = 0;
+            Exportparameters{i, 10} = 0;
+            Exportparameters{i, 11} = 0;
+        else
+            left_start_idx = leftStanceTimes(i, 1);
+            left_end_idx = leftStanceTimes(i, 2);
+            right_start_idx = rightStanceTimes(i, 1);
+            right_end_idx = rightStanceTimes(i, 2);
+
+            % Calculate double support time by identifying overlapping indices
+            double_support_start_idx = max(left_start_idx, right_start_idx);  % When both legs are in stance
+            double_support_end_idx = min(left_end_idx, right_end_idx);        % When one leg leaves stance
+            double_support_time = max(0, footcontacttime(double_support_end_idx) - footcontacttime(double_support_start_idx)) / 1000;
+
+            % Calculate stride time as reference for percentages
+            stride_start = min(footcontacttime(left_start_idx), footcontacttime(right_start_idx));
+            stride_end = max(footcontacttime(left_end_idx), footcontacttime(right_end_idx));
+            stridetime = (stride_end - stride_start) / 1000;
+
+            % Calculate stance time as a percentage of gait cycle time for each leg
+            left_stance_pct = Exportparameters{i, 4};  % Already calculated as (stancetime / stridetime) * 100 for left leg
+            right_stance_pct = Exportparameters{i, 5}; % Already calculated as (stancetime / stridetime) * 100 for right leg
+
+            % Calculate double support %GCT
+            double_support_pct = (double_support_time / stridetime) * 100;
+            Exportparameters{i, 13} = double_support_pct;  % Double Support L %GCT
+            Exportparameters{i, 14} = double_support_pct;  % Double Support R %GCT
+
+            % Calculate single support %GCT as difference between stance %GCT and double support %GCT
+            left_single_support_pct = left_stance_pct - double_support_pct;
+            right_single_support_pct = right_stance_pct - double_support_pct;
+
+            % Store single support times as percentages of the gait cycle time
+            Exportparameters{i, 10} = left_single_support_pct;  % Single Support L %GCT
+            Exportparameters{i, 11} = right_single_support_pct; % Single Support R %GCT
+        end
     end
     
     % 3. Calculating asymmetries

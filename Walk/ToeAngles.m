@@ -38,16 +38,23 @@ function [Exportparameters] = ToeAngles(data, bodyside, footcontact, Exportparam
             end
             
             idx_change = find(diff(trimmedstride) == -1) + idx_start;
-            
-            idx_end = idx_end - idx_start;
-            idx_change = idx_change - idx_start;
-            idx_start = 1;
-            %Heel Strike
-            Exportparameters{i, k+33} = s.Q_seg{i, (-9*k + 29)}(idx_start);
-            %Toe Off 
-            Exportparameters{i, k+27} = s.Q_seg{i, (-9*k + 29)}(idx_change);
-            %Toe Out
-            Exportparameters{i, k+30} = mean(s.Q_seg{i, (-9*k + 30)}(idx_start:idx_change));
+            if isempty(idx_change)
+                idx_change = 0;
+                Exportparameters{i, k+33} = 0;
+                Exportparameters{i, k+27} = 0;
+                Exportparameters{i, k+30} = 0;
+            else
+                idx_change = idx_change(end);
+                idx_end = idx_end - idx_start;
+                idx_change = idx_change - idx_start;
+                idx_start = 1;
+                %Heel Strike
+                Exportparameters{i, k+33} = s.Q_seg{i, (-9*k + 29)}(idx_start);
+                %Toe Off 
+                Exportparameters{i, k+27} = s.Q_seg{i, (-9*k + 29)}(idx_change);
+                %Toe Out
+                Exportparameters{i, k+30} = mean(s.Q_seg{i, (-9*k + 30)}(idx_start:idx_change));
+            end
         end
     end
     for i = 1:height(Exportparameters)

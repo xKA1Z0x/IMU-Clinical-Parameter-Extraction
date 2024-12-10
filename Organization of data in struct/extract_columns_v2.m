@@ -18,8 +18,10 @@ function [time,data_extracted, labels] = extract_columns_v2(filename, sheet, fil
 
 if file_sheet=="f"
     raw_data=readtable(filename);
+    time=raw_data.time;
 elseif file_sheet=="s"
     raw_data=readtable(filename, 'Sheet',sheet);
+    time=raw_data.Frame;
 end
 
 if isempty(raw_data)
@@ -27,7 +29,7 @@ if isempty(raw_data)
         fprintf("\n File " + filename + " not found");
     end
 else
-    time=raw_data.time;
+    
     col_names=string(raw_data.Properties.VariableNames);
     index_cols=[];
     for i=1:length(col_interest)

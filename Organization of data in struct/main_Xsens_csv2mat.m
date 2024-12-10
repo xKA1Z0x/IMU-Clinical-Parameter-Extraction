@@ -12,25 +12,25 @@ clear all
 
 %% control panel - settings
 avoid_cond=["Control", "LL", "PD"];  %write here specific folder of conditions you do not want this code to process
-avoid_part=["CVA01", "CVA02", "CVA03", "CVA04", "CVA05", "CVA06", "CVA07", "CVA08", "CVA09", "CVA10", "CVA12", "CVA13", "CVA14", "CVA15", "CVA16", "CVA17", "CVA18", "CVA19", "CVA20", "CVA21", "CVA22", "CVA23", "CVA24", "CVA25", "CVA26", "CVA27", "CVA28", "CVA29", "CVA30"];  %write here specific folder of participants you do not want this code to process
+avoid_part=["CVA01", "CVA02", "CVA03", "CVA04", "CVA05", "CVA06", "CVA07", "CVA08", "CVA09", "CVA10", "CVA12", "CVA13", "CVA14", "CVA15", "CVA17", "CVA11", "CVA18", "CVA19", "CVA20", "CVA21", "CVA22", "CVA23", "CVA24", "CVA25", "CVA26", "CVA27", "CVA28", "CVA29"];  %write here specific folder of participants you do not want this code to process
 avoid_tasks=[""];  %write here specific folder of tasks or trials you do not want this code to process
 
-need_quat2eul_conversion=1;   %0/1 flag activating or not the conversion from quaternions to euler angles
+need_quat2eul_conversion=0;   %0/1 flag activating or not the conversion from quaternions to euler angles
 orientation_type='XYZ';  %gloabl orientation of the P2C / Jungle databases (Xsens based)
 
 label_inversion=1;  %0/1 flag activating or not the inversion of the labels in the joint angle data
 
-file_sheet="f"; % if "f", it means the data is derived from different files, one for each data type (AJ, V, ACC, ...). if "s", it means there is a unique excel file with multiple sheets
+file_sheet="s"; % if "f", it means the data is derived from different files, one for each data type (AJ, V, ACC, ...). if "s", it means there is a unique excel file with multiple sheets
 if file_sheet=="s"
     need_quat2eul_conversion=0;
     label_inversion=0;
 end
 
 %P2C
-initial_folder= "Y:\P2C\P2C_Database_Segmented - Database paper version";
+initial_folder= "Z:\P2C\P2C_Database_Segmented - Database paper version";
 %initial_folder="\\fs2\RTO\P2C\P2C_Database_Segmented - Database paper version"; %direct the code to a specific folder, without interactively ask to the user
 %Jungle
-initial_folder="\\fs2\RTO\P2C\Amazon Data\General_Movement_Dataset";
+% initial_folder="\\fs2\RTO\P2C\Amazon Data\General_Movement_Dataset";
 verbosity=1; %flag for turning on and off the verbosity of the code. 0=the code is not outputting any info; 1= the code is providing info on the portion under processing
 %% positioning in the proper folder and selecting the files
 addpath('\\fs2.smpp.local\rto\STARS\Inpatient Study\Analysis\Matlab_function');
@@ -114,7 +114,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet="Segment Position";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
                                  
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "RightFoot_x", "RightFoot_y", "RightFoot_z", "LeftFoot_x", "LeftFoot_y", "LeftFoot_z"];
@@ -130,7 +130,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet="Joint Angles XZY";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
 
                                 col_interest=["jL5S1_x", "jL5S1_y", "jL5S1_z", ...
@@ -145,7 +145,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet="Segment Orientation - Euler";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
                                  
                                 col_interest=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
@@ -199,7 +199,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet= "Segment Acceleration";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
                                  
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
@@ -216,7 +216,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet="Sensor Free Acceleration";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
                                  
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", ...
@@ -233,7 +233,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet= "Segment Angular Velocity";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
                                  
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
@@ -250,7 +250,7 @@ for c=1:length(conditions) %for each condition folder available
                                     sheet="";
                                 else
                                     sheet="Segment Velocity";
-                                    filename=fileInfo;
+                                    filename=fileInfo.name;
                                 end
                                  
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...

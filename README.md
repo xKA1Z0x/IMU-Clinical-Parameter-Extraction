@@ -1,8 +1,9 @@
 # IMU-Clinical-Parameter-Extraction V1.3.0
 
-# Major update in V1.3.0:
-1. miniBESTest Pipeline added
-   
+# Major update in V1.3.1:
+1. Walking pipeline; SSSD, Toeangle and steplength bugs fixed.
+2. Walking pipeline; easier to load and save files.
+3. All strides without both stance and swing phases will be dropped   
 #
 ## Objective
 This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function. It can process IMU signals and extract gait and balance parameters. 

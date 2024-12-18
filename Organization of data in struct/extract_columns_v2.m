@@ -1,4 +1,4 @@
-function [time,data_extracted, labels] = extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity)
+function [time,data_extracted, labels] = extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3)
 %this function is used to extract the specific columns fromt he csv file of
 %each Xsens file type
 
@@ -35,16 +35,50 @@ else
     for i=1:length(col_interest)
         index_cols=[index_cols;find(col_names==col_interest(i))];
     end
+    if isempty(index_cols)
+        for i=1:length(col_interest2)
+            index_cols=[index_cols;find(col_names==col_interest2(i))];
+        end
+    end
+    if isempty(index_cols)
+        for i=1:length(col_interest3)
+            index_cols=[index_cols;find(col_names==col_interest3(i))];
+        end
+    end
+    if isempty(index_cols)
+        col_interest4=replace(col_interest3, " ", "");
+        col_interest4=replace(col_interest4, "/", "_");
+        for i=1:length(col_interest4)
+            index_cols=[index_cols;find(col_names==col_interest4(i))];
+        end
+    end
+    if isempty(index_cols)
+        if contains(col_interest(1), "_")
+            col_interest3=replace(col_interest, "_", " ");
+        else col_interest3=replace(col_interest2, "_", " ");
+        end
+        
+        for i=1:length(col_interest2)
+            index_cols=[index_cols;find(col_names==col_interest2(i))];
+        end
+    end
+    if isempty(index_cols)
+        print("ERRORE");
+    end
     data_extracted=table2array(raw_data(:,index_cols));
+    all_columns=1:size(raw_data, 2);
+    remaining_columns=setdiff(all_columns, index_cols);
     
     %I attach also the other columns, to have a complete picture
-    all_columns=1:size(raw_data, 2);
+    
     if col_names(2)=="time" && col_names(3)=="ms"
         all_columns(1:3)=[];
+        remaining_columns(1:3)=[];
     elseif col_names(1)=="Frames"
         all_columns(1)=[];
+        remaining_columns(1)=[];
     end
-    remaining_columns=setdiff(all_columns, index_cols);
+    
     data_extracted=[data_extracted, table2array(raw_data(:,remaining_columns))];
     
     %save in the labels variable the names of the variables

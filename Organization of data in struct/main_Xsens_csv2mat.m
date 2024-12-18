@@ -11,24 +11,25 @@ clear all
 %additionally, an excel incomplete_data file will be saved in the same folder of the cose
 
 %% control panel - settings
-avoid_cond=["Control", "CVA", "PD"];  %write here specific folder of conditions you do not want this code to process
-avoid_part=["LL01", "LL02", "LL03","LL04","LL05", "LL06", "LL07", "LL08", "LL09", "LL10", "LL11","LL14", "LL15", "LL16", "LL17", "LL18", "LL19", "LL20"];  %write here specific folder of participants you do not want this code to process
-avoid_tasks=["MINIBEST", "10MWT", "2MWT"];  %write here specific folder of tasks or trials you do not want this code to process
+avoid_cond=["CVA", "PD"];  %write here specific folder of conditions you do not want this code to process
+avoid_part=["LL01", "LL02", "LL03", "LL06", "LL07", "LL08", "LL09", "LL14", "LL15", "LL16", "LL17", "LL18", "LL19", "LL2"];  %write here specific folder of participants you do not want this code to process
+avoid_tasks=["MINIBEST"];  %write here specific folder of tasks or trials you do not want this code to process
 
 need_quat2eul_conversion=0;   %0/1 flag activating or not the conversion from quaternions to euler angles
 orientation_type='XYZ';  %gloabl orientation of the P2C / Jungle databases (Xsens based)
 
 label_inversion=1;  %0/1 flag activating or not the inversion of the labels in the joint angle data
 
-file_sheet="s"; % if "f", it means the data is derived from different files, one for each data type (AJ, V, ACC, ...). if "s", it means there is a unique excel file with multiple sheets
+file_sheet="f"; % if "f", it means the data is derived from different files, one for each data type (AJ, V, ACC, ...). if "s", it means there is a unique excel file with multiple sheets
 if file_sheet=="s"
     need_quat2eul_conversion=0;
     label_inversion=0;
 end
 
 %P2C
-initial_folder= "Z:\P2C\P2C_Database_Segmented - Database paper version";
+% initial_folder= "Z:\P2C\P2C_Database_Segmented - Database paper version";
 %initial_folder="\\fs2\RTO\P2C\P2C_Database_Segmented - Database paper version"; %direct the code to a specific folder, without interactively ask to the user
+initial_folder = "\\fs2\RTO\LabMembers\S Daneshgar\SpinalStim";
 %Jungle
 % initial_folder="\\fs2\RTO\P2C\Amazon Data\General_Movement_Dataset";
 verbosity=1; %flag for turning on and off the verbosity of the code. 0=the code is not outputting any info; 1= the code is providing info on the portion under processing
@@ -118,8 +119,10 @@ for c=1:length(conditions) %for each condition folder available
                                 end
                                  
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "RightFoot_x", "RightFoot_y", "RightFoot_z", "LeftFoot_x", "LeftFoot_y", "LeftFoot_z"];
+                                col_interest2=["PelvisX", "PelvisY", "PelvisZ", "RightFootX", "RightFootY", "RightFootZ", "LeftFootX", "LeftFootY", "LeftFootZ"];
+                                col_interest3=["Pelvis x", "Pelvis y", "Pelvis z", "RightFoot x", "RightFoot y", "RightFoot z", "LeftFoot x", "LeftFoot y", "LeftFoot z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 xsens_ord.time=time;
                                 xsens_ord.Pos=data_extracted;
                                 lab.Pos=labels;
@@ -136,8 +139,15 @@ for c=1:length(conditions) %for each condition folder available
                                 col_interest=["jL5S1_x", "jL5S1_y", "jL5S1_z", ...
                                     "jRightHip_x", "jRightHip_y",	"jRightHip_z",	"jRightKnee_x",	"jRightKnee_y",	"jRightKnee_z",	"jRightAnkle_x", "jRightAnkle_y", "jRightAnkle_z", ...
                                     "jLeftHip_x", "jLeftHip_y",	"jLeftHip_z",	"jLeftKnee_x",	"jLeftKnee_y",	"jLeftKnee_z",	"jLeftAnkle_x",	"jLeftAnkle_y",	"jLeftAnkle_z"];
+                                col_interest2=["jL5S1X", "jL5S1Y", "jL5S1Z", ...
+                                    "jRightHipX", "jRightHipY",	"jRightHipZ",	"jRightKneeX",	"jRightKneeY",	"jRightKneeZ",	"jRightAnkleX", "jRightAnkleY", "jRightAnkleZ", ...
+                                    "jLeftHipX", "jLeftHipY",	"jLeftHipZ",	"jLeftKneeX",	"jLeftKneeY",	"jLeftKneeZ",	"jLeftAnkleX",	"jLeftAnkleY",	"jLeftAnkleZ"];
+                                col_interest3=["L5S1 Lateral Bending", "L5S1 Axial Bending", "L5S1 Flexion/Extension", ...
+                                    "Right Hip Abduction/Adduction", "Right Hip Internal/External Rotation",	"Right Hip Flexion/Extension",	"Right Knee Abduction/Adduction",	"Right Knee Internal/External Rotation",	"Right Knee Flexion/Extension",	"Right Ankle Abduction/Adduction", "Right Ankle Internal/External Rotation", "Right Ankle Dorsiflexion/Plantarflexion", ...
+                                    "Left Hip Abduction/Adduction", "Left Hip Internal/External Rotation",	"Left Hip Flexion/Extension",	"Left Knee Abduction/Adduction",	"Left Knee Internal/External Rotation",	"Left Knee Flexion/Extension",	"Left Ankle Abduction/Adduction",	"Left Ankle Internal/External Rotation",	"Left Ankle Dorsiflexion/Plantarflexion"];
+
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labelsJA]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 
                                 %adding orientation to the struct
                                 if file_sheet=="f"
@@ -151,12 +161,18 @@ for c=1:length(conditions) %for each condition folder available
                                 col_interest=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
                                     "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
                                     "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
+                                col_interest2=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
+                                    "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
+                                    "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
+                                col_interest3=["Pelvis x", "Pelvis y", "Pelvis z", "L5 x", "L5 y", "L5 z", ...
+                                    "RightUpperLeg x", "RightUpperLeg y", "RightUpperLeg z", "RightFoot x",	"RightFoot y",	"RightFoot z", "RightLowerLeg x", "RightLowerLeg y", "RightLowerLeg z", ...
+                                    "LeftUpperLeg x", "LeftUpperLeg y", "LeftUpperLeg z", "LeftFoot x",	"LeftFoot y",	"LeftFoot z", "LeftLowerLeg x", "LeftLowerLeg y", "LeftLowerLeg z"];
                                 addpath (folderanalysis)
                                 if need_quat2eul_conversion==1
                                     filename_new= orientation_conversion(filename,orientation_type);
                                 else filename_new=filename;
                                 end
-                                [time, data_extracted, labels]=extract_columns_v2(filename_new, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename_new, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 xsens_ord.Q=data_extracted;
                                 lab.Q=labels;
                                 
@@ -168,7 +184,17 @@ for c=1:length(conditions) %for each condition folder available
                                 if ori_tab_names(2)=="time" && ori_tab_names(3)=="ms"
                                     ori=ori(:,4:end);
                                 end
-                                position=readmatrix("position.csv");
+                                
+                                if file_sheet=="f"
+                                    filename="position.csv"; 
+                                    
+                                    position=readmatrix(filename);
+                                else
+                                    sheet="Segment Position";
+                                    filename=fileInfo.name;
+                                    position=readmatrix(filename, 'Sheet', sheet);
+                                end
+                                
                                 clear Pel
                                 for k = 1:length(time)
                                     q_PE_init   = quaternion((ori(1,1:4)));         % Pelvis quaternion at start
@@ -179,19 +205,25 @@ for c=1:length(conditions) %for each condition folder available
                                 % Correct discontinuous signal near -+180 degree in pelvis rotation
                                 Pel(:,3) = pelvis_correct(Pel(:,3));
                                 xsens_ord.JA=[(Pel(:,:)*180/pi), data_extracted];
-                                labels=["Pelvis_x", "Pelvis_y", "Pelvis_z", labels];
+                                labelsJA=["Pelvis_x", "Pelvis_y", "Pelvis_z", labelsJA];
                                 
                                 %%%PART ONLY FOR P2C DATASET, WITH COLUMN NAME CHANGE
                                 %deactivate the flag if this problem does not apply
                                 if label_inversion==1
-                                    old_labels=labels;
+                                    old_labels=labelsJA;
                                     oldy=find(endsWith(old_labels,"_y")==1);
                                     oldz=find(endsWith(old_labels,"_z")==1);
-                                    labels(oldy)=replace(labels(oldy), "_y", "_z");
-                                    labels(oldz)=replace(labels(oldz), "_z", "_y");
+                                    labelsJA(oldy)=replace(labelsJA(oldy), "_y", "_z");
+                                    labelsJA(oldz)=replace(labelsJA(oldz), "_z", "_y");
+                                end
+                                if file_sheet=="s"
+                                    old_labels=labelsJA;
+                                    labelsJA(1:3:length(labelsJA))=strcat(labelsJA(1:3:length(labelsJA)), "_x_");
+                                    labelsJA(2:3:length(labelsJA))=strcat(labelsJA(2:3:length(labelsJA)), "_z_");
+                                    labelsJA(3:3:length(labelsJA))=strcat(labelsJA(3:3:length(labelsJA)), "_y_");
                                 end
                                 %%%%%%%
-                                lab.JA=labels;
+                                lab.JA=labelsJA;
                                 
                                 %adding acceleration to the struct
                                 if file_sheet=="f"
@@ -205,8 +237,14 @@ for c=1:length(conditions) %for each condition folder available
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
+                                col_interest2=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
+                                    "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
+                                    "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
+                                col_interest3=["Pelvis x", "Pelvis y", "Pelvis z", "L5 x", "L5 y", "L5 z", ...
+                                    "RightUpperLeg x", "RightUpperLeg y", "RightUpperLeg z", "RightFoot x",	"RightFoot y",	"RightFoot z", "RightLowerLeg x", "RightLowerLeg y", "RightLowerLeg z", ...
+                                    "LeftUpperLeg x", "LeftUpperLeg y", "LeftUpperLeg z", "LeftFoot x",	"LeftFoot y",	"LeftFoot z", "LeftLowerLeg x", "LeftLowerLeg y", "LeftLowerLeg z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 xsens_ord.ACC=data_extracted;
                                 lab.ACC=labels;
                                 
@@ -222,8 +260,14 @@ for c=1:length(conditions) %for each condition folder available
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
+                                col_interest2=["PelvisX", "PelvisY", "PelvisZ", ...
+                                    "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
+                                    "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
+                                col_interest3=["Pelvis x", "Pelvis y", "Pelvis z", ...
+                                    "RightUpperLeg x", "RightUpperLeg y", "RightUpperLeg z", "RightFoot x",	"RightFoot y",	"RightFoot z", "RightLowerLeg x", "RightLowerLeg y", "RightLowerLeg z", ...
+                                    "LeftUpperLeg x", "LeftUpperLeg y", "LeftUpperLeg z", "LeftFoot x",	"LeftFoot y",	"LeftFoot z", "LeftLowerLeg x", "LeftLowerLeg y", "LeftLowerLeg z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 xsens_ord.ACC_S=data_extracted;
                                 lab.ACC_S=labels;
                                 
@@ -239,8 +283,14 @@ for c=1:length(conditions) %for each condition folder available
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
+                                col_interest2=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
+                                    "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
+                                    "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
+                                col_interest3=["Pelvis x", "Pelvis y", "Pelvis z", "L5 x", "L5 y", "L5 z", ...
+                                    "RightUpperLeg x", "RightUpperLeg y", "RightUpperLeg z", "RightFoot x",	"RightFoot y",	"RightFoot z", "RightLowerLeg x", "RightLowerLeg y", "RightLowerLeg z", ...
+                                    "LeftUpperLeg x", "LeftUpperLeg y", "LeftUpperLeg z", "LeftFoot x",	"LeftFoot y",	"LeftFoot z", "LeftLowerLeg x", "LeftLowerLeg y", "LeftLowerLeg z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 xsens_ord.AV=data_extracted;
                                 lab.AV=labels;
                                 
@@ -256,8 +306,14 @@ for c=1:length(conditions) %for each condition folder available
                                 col_interest=["Pelvis_x", "Pelvis_y", "Pelvis_z", "L5_x", "L5_y", "L5_z", ...
                                     "RightUpperLeg_x", "RightUpperLeg_y", "RightUpperLeg_z", "RightFoot_x",	"RightFoot_y",	"RightFoot_z", "RightLowerLeg_x", "RightLowerLeg_y", "RightLowerLeg_z", ...
                                     "LeftUpperLeg_x", "LeftUpperLeg_y", "LeftUpperLeg_z", "LeftFoot_x",	"LeftFoot_y",	"LeftFoot_z", "LeftLowerLeg_x", "LeftLowerLeg_y", "LeftLowerLeg_z"];
+                                col_interest2=["PelvisX", "PelvisY", "PelvisZ", "L5X", "L5Y", "L5Z", ...
+                                    "RightUpperLegX", "RightUpperLegY", "RightUpperLegZ", "RightFootX",	"RightFootY",	"RightFootZ", "RightLowerLegX", "RightLowerLegY", "RightLowerLegZ", ...
+                                    "LeftUpperLegX", "LeftUpperLegY", "LeftUpperLegZ", "LeftFootX",	"LeftFootY",	"LeftFootZ", "LeftLowerLegX", "LeftLowerLegY", "LeftLowerLegZ"];
+                                col_interest3=["Pelvis x", "Pelvis y", "Pelvis z", "L5 x", "L5 y", "L5 z", ...
+                                    "RightUpperLeg x", "RightUpperLeg y", "RightUpperLeg z", "RightFoot x",	"RightFoot y",	"RightFoot z", "RightLowerLeg x", "RightLowerLeg y", "RightLowerLeg z", ...
+                                    "LeftUpperLeg x", "LeftUpperLeg y", "LeftUpperLeg z", "LeftFoot x",	"LeftFoot y",	"LeftFoot z", "LeftLowerLeg x", "LeftLowerLeg y", "LeftLowerLeg z"];
                                 addpath (folderanalysis)
-                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity);
+                                [time, data_extracted, labels]=extract_columns_v2(filename, sheet, file_sheet, col_interest, verbosity, col_interest2, col_interest3);
                                 xsens_ord.V=data_extracted;
                                 lab.V=labels;
                                 

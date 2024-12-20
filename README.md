@@ -3,6 +3,7 @@
 # MAJOR Update in V1.4:
 1. Walking pipeline has three new functions. With these functions you do not need any GaitRite data to calculate heel strike and toe off contacts.
 2. Pipeline is not adapted with Segmented_v2 files for feature extraction.
+3. AMPPRO pipeline added
    
 #
 ## Objective

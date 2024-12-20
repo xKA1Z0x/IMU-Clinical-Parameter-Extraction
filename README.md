@@ -1,7 +1,9 @@
-# IMU-Clinical-Parameter-Extraction V1.3.2
+# IMU-Clinical-Parameter-Extraction V1.4
 
-# Update in V1.3.2:
-1. New optional version of gaitsegmentation is added. ("SD Version")
+# MAJOR Update in V1.4:
+1. Walking pipeline has three new functions. With these functions you do not need any GaitRite data to calculate heel strike and toe off contacts.
+2. Pipeline is not adapted with Segmented_v2 files for feature extraction.
+   
 #
 ## Objective
 This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function. It can process IMU signals and extract gait and balance parameters. 

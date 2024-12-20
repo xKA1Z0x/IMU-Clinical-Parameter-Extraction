@@ -1,16 +1,38 @@
 function Exportparameters = ElevationCircumduction(data, bodyside, Exportparameters)
-    %calling the body side in a loop 
+    LHS = data.segmented.new_seg.Segmented.Lseg.Contact{:, 1};
+    RHS = data.segmented.new_seg.Segmented.Rseg.Contact{:, 1};
+    LTO = data.segmented.new_seg.Segmented.Lseg.Contact{:, 2};
+    RTO = data.segmented.new_seg.Segmented.Rseg.Contact{:, 2};
+    
     for k = 1:numel(bodyside)
-        s = data.subdata_out.Segmented.(bodyside{k});
-        %loop through each stride for the current body side
+        s = data.segmented.new_seg.Segmented.(bodyside{k});
         for i = 1:size(s.Pos_seg, 1)
-            %calculating midswing elevation using the original Pos
-                Exportparameters{i, k + 15} = max(s.Pos_seg{i,((-3*k)+12)}) - min(s.Pos_seg{i, ((-3*k)+12)});
-                %calculating circumduction using the filtered Pos
-                Exportparameters{i, k + 36} = max(s.PosFiltered_seg{i, ((-3*k)+11)}) - min(s.PosFiltered_seg{i, (-3*k)+11}); 
-
+            if k == 1
+                if LHS - LTO <= 0
+                    swing = 0;
+                    swingfilter = 0;
+                else
+                    swing = s.Pos_seg{i, 9};
+                    swing(LHS(i):LTO(i)) = [];
+                    swingfilter = s.PosFiltered_seg{i, 8};
+                    swingfilter(LHS(i):LTO(i)) = [];
+                end
+            elseif k == 2
+                if RHS - RTO <= 0
+                    swing = 0;
+                    swingfilter = 0;
+                else
+                swing = s.Pos_seg{i, 6};
+                swing(RHS(i):RTO(i)) = [];
+                swingfilter = s.PosFiltered_seg{i, 5};
+                swingfilter(LHS(i):LTO(i)) = [];
+                end
+            end
+            Exportparameters{i, k + 15} = max(swing)-min(swing);
+            Exportparameters{i, k + 36} = max(swingfilter) - min(swingfilter);
         end
     end
+    
     %calculating midswing elevation assymetry
        for i = 1:height(Exportparameters)
            if ~isnan(Exportparameters{i, 16}) && ~isnan(Exportparameters{i, 17})

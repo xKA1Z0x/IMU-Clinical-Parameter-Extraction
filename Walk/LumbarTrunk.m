@@ -1,22 +1,22 @@
 function [Exportparameters] = LumbarTrunk(data, Exportparameters)
     %Extract Lumbar Orientation Signals 
-    LOxRight = data.subdata_out.Segmented.Rseg.Q_seg{:, 25};
-    LOyRight = data.subdata_out.Segmented.Rseg.Q_seg{:, 26};
-    LOzRight = data.subdata_out.Segmented.Rseg.Q_seg{:, 27};
-    LOxLeft = data.subdata_out.Segmented.Lseg.Q_seg{:, 25};
-    LOyLeft = data.subdata_out.Segmented.Lseg.Q_seg{:, 26};
-    LOzLeft = data.subdata_out.Segmented.Lseg.Q_seg{:, 27};
+    LOxRight = data.segmented.new_seg.Segmented.Rseg.Q_seg{:, 25};
+    LOyRight = data.segmented.new_seg.Segmented.Rseg.Q_seg{:, 26};
+    LOzRight = data.segmented.new_seg.Segmented.Rseg.Q_seg{:, 27};
+    LOxLeft = data.segmented.new_seg.Segmented.Lseg.Q_seg{:, 25};
+    LOyLeft = data.segmented.new_seg.Segmented.Lseg.Q_seg{:, 26};
+    LOzLeft = data.segmented.new_seg.Segmented.Lseg.Q_seg{:, 27};
     %Extract Trunk Orientation Signals
-    TOxRight = data.subdata_out.Segmented.Rseg.Q_seg{:, 31};
-    TOyRight = data.subdata_out.Segmented.Rseg.Q_seg{:, 32};
-    TOzRight = data.subdata_out.Segmented.Rseg.Q_seg{:, 33};
-    TOxLeft = data.subdata_out.Segmented.Lseg.Q_seg{:, 31};
-    TOyLeft = data.subdata_out.Segmented.Lseg.Q_seg{:, 32};
-    TOzLeft = data.subdata_out.Segmented.Lseg.Q_seg{:, 33};
+    TOxRight = data.segmented.new_seg.Segmented.Rseg.Q_seg{:, 31};
+    TOyRight = data.segmented.new_seg.Segmented.Rseg.Q_seg{:, 32};
+    TOzRight = data.segmented.new_seg.Segmented.Rseg.Q_seg{:, 33};
+    TOxLeft = data.segmented.new_seg.Segmented.Lseg.Q_seg{:, 31};
+    TOyLeft = data.segmented.new_seg.Segmented.Lseg.Q_seg{:, 32};
+    TOzLeft = data.segmented.new_seg.Segmented.Lseg.Q_seg{:, 33};
     
     %Determine the number of strides for right and left
-    numRightStrides = size(data.subdata_out.Segmented.Rseg.Q_seg, 1);
-    numLeftStrides = size(data.subdata_out.Segmented.Lseg.Q_seg, 1);
+    numRightStrides = size(data.segmented.new_seg.Segmented.Rseg.Q_seg, 1);
+    numLeftStrides = size(data.segmented.new_seg.Segmented.Lseg.Q_seg, 1);
     
     %Number of full gait cycles (pairs of right and left strides)
     numFullGaits = min(numRightStrides, numLeftStrides);

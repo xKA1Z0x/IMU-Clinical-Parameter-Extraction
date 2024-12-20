@@ -1,11 +1,11 @@
-function Exportparameters = Cadence(data, bodyside, Exportparameters)
+function Exportparameters = Cadence(data, bodyside, Exportparameters, sf)
        %calling the body side in a loop
    for k = 1:numel(bodyside)
-       s = data.subdata_out.Segmented.(bodyside{k});
+       s = data.segmented.new_seg.Segmented.(bodyside{k});
        %loop through each stride for the current body side
        for i = 1:size(s.ACC_seg, 1)
            %calculate cadence for each stride and assign to the table
-           Exportparameters{i, k+0} = (60^2)/length(s.ACC_seg{i,1});
+           Exportparameters{i, k} = (sf^2)/length(s.ACC_seg{i,1});
        end
    end
    

@@ -8,7 +8,7 @@ function data = OrientationCorrection(data, bodyside, columnIndices, minProminen
     for bs = 1:2
         for x = columnIndices
             % Extract the column of cells
-            cellArray = data.subdata_out.Segmented.(bodyside{bs}).Q_seg(:, x);
+            cellArray = data.segmented.new_seg.Segmented.(bodyside{bs}).Q_seg(:, x);
             
             % Loop through each cell in the column
             for cellIndex = 1:length(cellArray)
@@ -83,7 +83,7 @@ function data = OrientationCorrection(data, bodyside, columnIndices, minProminen
             end
             
             % Update the data structure with the modified cell array
-            data.subdata_out.Segmented.(bodyside{bs}).Q_seg(:, x) = cellArray;
+            data.segmented.new_seg.Segmented.(bodyside{bs}).Q_seg(:, x) = cellArray;
         end
     end
 end

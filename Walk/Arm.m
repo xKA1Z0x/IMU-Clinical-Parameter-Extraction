@@ -1,7 +1,7 @@
 function [Exportparameters] = Arm(data, Exportparameters)
     %calling the body side in a loop
         
-        s = data.subdata_out.Segmented;
+        s = data.segmented.new_seg.Segmented;
 for i = 1:max(size(s.Lseg.Q_seg, 1), size(s.Rseg.Q_seg, 1))
     
     % Check and calculate for Exportparameters{i, 46}
@@ -36,9 +36,6 @@ for i = 1:max(size(s.Lseg.Q_seg, 1), size(s.Rseg.Q_seg, 1))
         Exportparameters{i, 50} = NaN;  % Set to NaN if data is missing or empty
     end
 end
-
-       
-        
    for i = 1:height(Exportparameters)
        if ~isnan(Exportparameters{i, 46}) && ~isnan(Exportparameters{i, 47})
           Exportparameters{i, 48} = (Exportparameters{i, 46}-Exportparameters{i,47}) / (0.5 * (Exportparameters{i, 46}+Exportparameters{i,47})) * 100;

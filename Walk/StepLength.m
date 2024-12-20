@@ -1,6 +1,6 @@
 function Exportparameters = StepLength(data, bodyside, Exportparameters)
     for k = 1:numel(bodyside)
-        s = data.subdata_out.Segmented.(bodyside{k});
+        s = data.segmented.new_seg.Segmented.(bodyside{k});
         for i = 1:size(s.Pos_seg, 1)
             Exportparameters{i, k + 18} = max(s.Pos_seg{i, (k*3)+1}) - min(s.Pos_seg{i, (k*3)+1});
         end

@@ -2,7 +2,7 @@ function [Exportparameters] = ToeAngles(data, bodyside, Exportparameters)
     LHS = data.segmented.new_seg.Segmented.Lseg.Contact{:, 1};
     RHS = data.segmented.new_seg.Segmented.Rseg.Contact{:, 1};
     LTO = data.segmented.new_seg.Segmented.Lseg.Contact{:, 2};
-    RTO = data.segmented.new_seg.Segmented.Lseg.Contact{:, 2};
+    RTO = data.segmented.new_seg.Segmented.Rseg.Contact{:, 2};
 
     for k = 1:numel(bodyside)   %Loop through body side
         s = data.segmented.new_seg.Segmented.(bodyside{k});  %Select the bodyside

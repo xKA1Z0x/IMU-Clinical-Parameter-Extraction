@@ -8,7 +8,7 @@ function Exportparameters = ElevationCircumduction(data, bodyside, Exportparamet
         s = data.segmented.new_seg.Segmented.(bodyside{k});
         for i = 1:size(s.Pos_seg, 1)
             if k == 1
-                if LHS - LTO <= 0
+                if LHS(i) - LTO(i) >= 0
                     swing = 0;
                     swingfilter = 0;
                 else
@@ -18,14 +18,14 @@ function Exportparameters = ElevationCircumduction(data, bodyside, Exportparamet
                     swingfilter(LHS(i):LTO(i)) = [];
                 end
             elseif k == 2
-                if RHS - RTO <= 0
+                if RHS(i) - RTO(i) >= 0
                     swing = 0;
                     swingfilter = 0;
                 else
                 swing = s.Pos_seg{i, 6};
                 swing(RHS(i):RTO(i)) = [];
                 swingfilter = s.PosFiltered_seg{i, 5};
-                swingfilter(LHS(i):LTO(i)) = [];
+                swingfilter(RHS(i):RTO(i)) = [];
                 end
             end
             Exportparameters{i, k + 15} = max(swing)-min(swing);

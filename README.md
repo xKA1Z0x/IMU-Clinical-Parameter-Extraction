@@ -1,9 +1,8 @@
-# IMU-Clinical-Parameter-Extraction V1.4
+# IMU-Clinical-Parameter-Extraction V1.4.1
 
-# MAJOR Update in V1.4:
-1. Walking pipeline has three new functions. With these functions you do not need any GaitRite data to calculate heel strike and toe off contacts.
-2. Pipeline is not adapted with Segmented_v2 files for feature extraction.
-3. AMPPRO pipeline added
+# MINOR Update in V1.4.1:
+1. Bug fixes in the walking pipeline -> ToeAngles and ElevationCircumduction functions
+2. The new pipeline will convert old structures to the new structure version for compatibility. 
    
 #
 ## Objective

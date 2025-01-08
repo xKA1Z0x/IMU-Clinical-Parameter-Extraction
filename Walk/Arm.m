@@ -7,7 +7,7 @@ for i = 1:max(size(s.Lseg.Q_seg, 1), size(s.Rseg.Q_seg, 1))
     % Check and calculate for Exportparameters{i, 46}
     if i <= size(s.Lseg.AV_seg, 1) && i <= size(s.Rseg.AV_seg, 1) && ...
        ~isempty(s.Lseg.AV_seg{i, 58}) && ~isempty(s.Rseg.AV_seg{i, 58})
-        Exportparameters{i, 46} = max(s.Lseg.AV_seg{i, 58}) - min(s.Rseg.AV_seg{i, 58});
+        Exportparameters{i, 46} = max(max(s.Lseg.AV_seg{i, 58}), max(s.Rseg.AV_seg{i, 58})) - min(min(s.Lseg.AV_seg{i, 58}), min(s.Rseg.AV_seg{i, 58}));
     else
         Exportparameters{i, 46} = NaN;  % Set to NaN if data is missing or empty
     end
@@ -15,7 +15,7 @@ for i = 1:max(size(s.Lseg.Q_seg, 1), size(s.Rseg.Q_seg, 1))
     % Check and calculate for Exportparameters{i, 47}
     if i <= size(s.Lseg.Q_seg, 1) && i <= size(s.Rseg.Q_seg, 1) && ...
        ~isempty(s.Lseg.Q_seg{i, 46}) && ~isempty(s.Rseg.Q_seg{i, 46})        
-       Exportparameters{i, 47} = max(s.Lseg.AV_seg{i, 46}) - min(s.Rseg.AV_seg{i, 46});
+        Exportparameters{i, 47} = max(max(s.Lseg.AV_seg{i, 46}), max(s.Rseg.AV_seg{i, 46})) - min(min(s.Lseg.AV_seg{i, 46}), min(s.Rseg.AV_seg{i, 46}));
     else
         Exportparameters{i, 47} = NaN;  % Set to NaN if data is missing or empty
     end
@@ -23,7 +23,7 @@ for i = 1:max(size(s.Lseg.Q_seg, 1), size(s.Rseg.Q_seg, 1))
     % Check and calculate for Exportparameters{i, 49}
     if i <= size(s.Lseg.Q_seg, 1) && i <= size(s.Rseg.Q_seg, 1) && ...
        ~isempty(s.Lseg.Q_seg{i, 58}) && ~isempty(s.Rseg.Q_seg{i, 58})
-        Exportparameters{i, 49} = max(s.Lseg.Q_seg{i, 58}) - min(s.Rseg.Q_seg{i, 58});
+        Exportparameters{i, 49} = max(max(s.Lseg.Q_seg{i, 58}), max(s.Rseg.Q_seg{i, 58})) - min(min(s.Lseg.Q_seg{i, 58}), min(s.Rseg.Q_seg{i, 58}));
     else
         Exportparameters{i, 49} = NaN;  % Set to NaN if data is missing or empty
     end
@@ -31,7 +31,7 @@ for i = 1:max(size(s.Lseg.Q_seg, 1), size(s.Rseg.Q_seg, 1))
     % Check and calculate for Exportparameters{i, 50}
     if i <= size(s.Lseg.Q_seg, 1) && i <= size(s.Rseg.Q_seg, 1) && ...
        ~isempty(s.Lseg.Q_seg{i, 46}) && ~isempty(s.Rseg.Q_seg{i, 46})
-        Exportparameters{i, 50} = max(s.Lseg.Q_seg{i, 46}) - min(s.Rseg.Q_seg{i, 46});
+        Exportparameters{i, 50} = max(max(s.Lseg.Q_seg{i, 46}), max(s.Rseg.Q_seg{i, 46})) - min(min(s.Lseg.Q_seg{i, 46}), min(s.Rseg.Q_seg{i, 46}));
     else
         Exportparameters{i, 50} = NaN;  % Set to NaN if data is missing or empty
     end

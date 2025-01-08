@@ -1,8 +1,7 @@
-# IMU-Clinical-Parameter-Extraction V1.4.1
+# IMU-Clinical-Parameter-Extraction V1.4.2
 
-# MINOR Update in V1.4.1:
-1. Bug fixes in the walking pipeline -> ToeAngles and ElevationCircumduction functions
-2. The new pipeline will convert old structures to the new structure version for compatibility. 
+# MINOR Update in V1.4.2:
+1. Walking pipeline: Arm and LumbarTrunk function bugs fixed.
    
 #
 ## Objective

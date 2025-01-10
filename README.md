@@ -1,7 +1,7 @@
-# IMU-Clinical-Parameter-Extraction V1.4.2
+# IMU-Clinical-Parameter-Extraction V1.4.3
 
-# MINOR Update in V1.4.2:
-1. Walking pipeline: Arm and LumbarTrunk function bugs fixed.
+# MINOR Update in V1.4.3:
+1. ContactTimesL and R now can retreive your last input. Not need to align all Heel Contact and Toe Off lines again. 
    
 #
 ## Objective

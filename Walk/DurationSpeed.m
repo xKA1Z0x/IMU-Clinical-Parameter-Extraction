@@ -1,23 +1,22 @@
-function [Exportparameters] = DurationSpeed(data, bodyside, Exportparameters, sf)
+function [Exportparameters] = DurationSpeed(data, bodyside, Exportparameters, sf, finalTableL, finalTableR)
     % 1. First, loop through both sides (left and right) to calculate stance and swing times
     for k = 1:numel(bodyside)
         % Extract the data for the body side
         s = data.segmented.new_seg.Segmented.(bodyside{k});
         
         if k == 1
-           startstride = s.LHS_idx(:, 1);
+           startstride = finalTableL(:, 5:6);
         else
-           startstride = s.RHS_idx(:, 1);
+           startstride = finalTableR(:, 5:6);
         end
-        for i = 1: length(startstride)-1
-            duration = (startstride(i+1) - startstride(i))/sf;
-            velocity = Exportparameters{i, 21} / duration;
+        for i = 1: height(startstride)
+            duration = (startstride{i, 2} - startstride{i, 1})/sf;
             if k == 1
                 Exportparameters{i, 22} = duration;
-                Exportparameters{i, 25} = velocity;
+                Exportparameters{i, 25} = Exportparameters{i, 19}/Exportparameters{i, 22};
             elseif k == 2
                 Exportparameters{i, 23} = duration;
-                Exportparameters{i, 26} = velocity;
+                Exportparameters{i, 26} = Exportparameters{i, 20}/Exportparameters{i, 23};
             end
         end
     end   

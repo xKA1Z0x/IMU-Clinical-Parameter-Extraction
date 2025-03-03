@@ -1,30 +1,30 @@
-function [ContactL] = ContactTimesL(data)
+function [ContactL, stride_start_indices_L] = ContactTimesL(data)
 
 % Check if the Contact table exists
 if isfield(data.segmented.new_seg.Segmented.Lseg, 'Contact') && ~isempty(data.segmented.new_seg.Segmented.Lseg.Contact)
     % Use existing table
     ContactL = data.segmented.new_seg.Segmented.Lseg.Contact;
 
-    % Compute stride_start_indices based on existing data
+    % Compute stride_start_indices_L based on existing data
     position_cells = data.segmented.new_seg.Segmented.Lseg.Pos_seg(:, 69);
     num_strides = height(ContactL);
-    stride_start_indices = zeros(num_strides, 1);
+    stride_start_indices_L = zeros(num_strides, 1);
     for i = 1:num_strides
-        stride_start_indices(i) = sum(cellfun(@numel, position_cells(1:i-1))) + 1;
+        stride_start_indices_L(i) = sum(cellfun(@numel, position_cells(1:i-1))) + 1;
     end
 else
     % Perform calculations to create the table
     position_cells = data.segmented.new_seg.Segmented.Lseg.Pos_seg(:, 69);
     velocity_cells = data.segmented.new_seg.Segmented.Lseg.V_seg(:, 21);
     num_strides = numel(position_cells);
-    stride_start_indices = zeros(num_strides, 1);
+    stride_start_indices_L = zeros(num_strides, 1);
     ContactL = table('Size', [num_strides, 4], 'VariableTypes', {'double', 'double', 'double', 'double'}, ...
                      'VariableNames', {'HSIdx', 'TOIdx', 'TotalHSIdx', 'TotalTOIdx'});
 
     for i = 1:num_strides
         position_stride = position_cells{i};
         velocity_stride = velocity_cells{i};
-        stride_start_indices(i) = sum(cellfun(@numel, position_cells(1:i-1))) + 1;
+        stride_start_indices_L(i) = sum(cellfun(@numel, position_cells(1:i-1))) + 1;
 
         % Toe-off (local minima in position)
         [~, local_min_idx] = findpeaks(-position_stride);
@@ -45,8 +45,8 @@ else
         ContactL.HSIdx(i) = zero_crossings;
         ContactL.TOIdx(i) = min_pos_idx;
     end
-    ContactL.TotalHSIdx = ContactL.HSIdx + stride_start_indices - 1;
-    ContactL.TotalTOIdx = ContactL.TOIdx + stride_start_indices - 1;
+    ContactL.TotalHSIdx = ContactL.HSIdx + stride_start_indices_L - 1;
+    ContactL.TotalTOIdx = ContactL.TOIdx + stride_start_indices_L - 1;
 end
 
 % Concatenate signals for visualization
@@ -82,7 +82,7 @@ xlim(ax, [1, 500]);
 
 stride_xlines = gobjects(height(ContactL), 2);
 for i = 1:height(ContactL)
-    stride_start_idx = stride_start_indices(i);
+    stride_start_idx = stride_start_indices_L(i);
     xline(ax, stride_start_idx, 'k-', 'Label', sprintf('Stride %d', i), ...
           'LineWidth', 1, 'LabelOrientation', 'aligned', 'LabelVerticalAlignment', 'middle', 'LabelHorizontalAlignment', 'center');
     stride_xlines(i, 1) = xline(ax, ContactL.TotalTOIdx(i), 'r-', 'LineWidth', 1.5, 'LineStyle', ':', ...
@@ -110,7 +110,7 @@ fig.UserData = struct('Contact', ContactL, ...
                       'stride_xlines', stride_xlines, ...
                       'dragging', false, ...
                       'current_xline', [], ...
-                      'stride_start_indices', stride_start_indices);
+                      'stride_start_indices_L', stride_start_indices_L);
 
 function startDragging(src, ~)
     fig.UserData.dragging = true;

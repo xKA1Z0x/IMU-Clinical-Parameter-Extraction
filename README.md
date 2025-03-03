@@ -1,8 +1,9 @@
 # IMU-Clinical-Parameter-Extraction V1.4.3
 
-# MINOR Update in V1.4.3:
-1. ContactTimesL and R now can retrieve your last input. Not need to align all Heel Contact and Toe Off lines again. 
-   
+# MINOR Update in V1.5.0:
+1. SSSD, ContactTimesR and ContactTimesL had big changes for a better calculation accuracy. 
+2. New function is added to also calculate stride start, end, heel strike and toe off indices.
+3. These indices will be saved in two new excels. 
 #
 ## Objective
 This pipeline helps you extracting over 100 important parameters from clinical assessments such as gait, balance and hand function. It can process IMU signals and extract gait and balance parameters. 

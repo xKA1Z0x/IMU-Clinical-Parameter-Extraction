@@ -1,7 +1,7 @@
 # IMU-Clinical-Parameter-Extraction V1.5.0
 
 # MINOR Update in V1.5.0:
-1. SSSD, ContactTimesR and ContactTimesL had big changes for a better calculation accuracy. 
+1. SSSD, ContactTimesR, ContactTimesL, and speedduration functions had big changes for a better calculation accuracy. 
 2. New function is added to also calculate stride start, end, heel strike and toe off indices.
 3. These indices will be saved in two new excels. 
 #

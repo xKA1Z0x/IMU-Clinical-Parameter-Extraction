@@ -1,4 +1,4 @@
-# IMU-Clinical-Parameter-Extraction V1.4.3
+# IMU-Clinical-Parameter-Extraction V1.5.0
 
 # MINOR Update in V1.5.0:
 1. SSSD, ContactTimesR and ContactTimesL had big changes for a better calculation accuracy. 

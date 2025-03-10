@@ -14,11 +14,11 @@ function [Exportparameters] = ToeAngles(data, bodyside, Exportparameters)
                     Exportparameters{i, 31} = 0;
                 else
                 %Heel Strike Angle
-                Exportparameters{i, 34} = s.Q_seg{i, 20}(LHS(i));
+                Exportparameters{i, 34} = s.JA_seg{i, 24}(LHS(i));
                 %Toe Off Angle
-                Exportparameters{i, 28} = s.Q_seg{i, 20}(LTO(i));
+                Exportparameters{i, 28} = s.JA_seg{i, 24}(LTO(i));
                 %Toe Out
-                Exportparameters{i, 31} = mean(s.Q_seg{i, 21}(LHS(i):LTO(i)));
+                Exportparameters{i, 31} = mean(s.JA_seg{i, 23}(LHS(i):LTO(i)));
                 end
             end
         elseif k == 2
@@ -29,11 +29,11 @@ function [Exportparameters] = ToeAngles(data, bodyside, Exportparameters)
                     Exportparameters{i, 32} = 0;
                 else
                 %Heel Strike
-                Exportparameters{i, 35} = s.Q_seg{i, 11}(RHS(i));
+                Exportparameters{i, 35} = s.JA_seg{i, 15}(RHS(i));
                 %Toe Off
-                Exportparameters{i, 29} = s.Q_seg{i, 11}(RTO(i));
+                Exportparameters{i, 29} = s.JA_seg{i, 15}(RTO(i));
                 %Toe Out
-                Exportparameters{i, 32} = mean(s.Q_seg{i, 12}(RHS(i): RTO(i)));
+                Exportparameters{i, 32} = mean(s.JA_seg{i, 14}(RHS(i): RTO(i)));
                 end
             end
         end

@@ -135,8 +135,10 @@ function finalizeDragging(~, ~)
     for i = 1:height(ContactR)
         if fig.UserData.current_xline == stride_xlines(i, 1)
             ContactR.TotalTOIdx(i) = updated_index;
+            ContactR.TOIdx(i) = updated_index - stride_start_indices_R(i) + 1;
         elseif fig.UserData.current_xline == stride_xlines(i, 2)
             ContactR.TotalHSIdx(i) = updated_index;
+            ContactR.HSIdx(i) = updated_index - stride_start_indices_R(i) + 1 ;
         end
     end
     assignin('base', 'ContactR', ContactR);

@@ -13,7 +13,7 @@ function [finalTableL, finalTableR] = findSequenceIndices(dataL, dataR, datanons
 
         if ~isempty(first_indexL)
             first_idx = first_indexL(1);
-            last_idx = first_idx + length(sequenceL) - 2;
+            last_idx = first_idx + length(sequenceL)-2;
         else
             first_idx = NaN;
             last_idx = NaN;
@@ -28,7 +28,7 @@ function [finalTableL, finalTableR] = findSequenceIndices(dataL, dataR, datanons
 
         if ~isempty(first_indexR)
             first_idx = first_indexR(1);
-            last_idx = first_idx + length(sequenceR) - 2;
+            last_idx = first_idx + length(sequenceR)-2;
         else
             first_idx = NaN;
             last_idx = NaN;
@@ -44,15 +44,15 @@ function [finalTableL, finalTableR] = findSequenceIndices(dataL, dataR, datanons
     finalTableR = [ContactR, indexTableR];
     
     if ismember('GaitStartIdx', finalTableL.Properties.VariableNames)
-        finalTableL{:, 3} = finalTableL{:, 3} + finalTableL.GaitStartIdx;
-        finalTableL{:, 4} = finalTableL{:, 4} + finalTableL.GaitStartIdx;
+        finalTableL{:, 3} = finalTableL{:, 3} + finalTableL{1, 5}-2;
+        finalTableL{:, 4} = finalTableL{:, 4} + finalTableL{1, 5}-2;
     else
         warning('GaitStartIdx not found in finalTableL');
     end
 
     if ismember('GaitStartIdx', finalTableR.Properties.VariableNames)
-        finalTableR{:, 3} = finalTableR{:, 3} + finalTableR.GaitStartIdx;
-        finalTableR{:, 4} = finalTableR{:, 4} + finalTableR.GaitStartIdx;
+        finalTableR{:, 3} = finalTableR{:, 3} + finalTableL{1, 5}-2;
+        finalTableR{:, 4} = finalTableR{:, 4} + finalTableL{1, 5}-2;
     else
         warning('GaitStartIdx not found in finalTableR');
     end

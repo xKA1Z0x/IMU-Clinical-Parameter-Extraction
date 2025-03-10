@@ -39,7 +39,7 @@ function [Exportparameters] = SSSD(Exportparameters, finalTableL, finalTableR)
             correct_sequence = [heelStrikeL, heelStrikeR, toeOffL, toeOffR];
             if issorted(correct_sequence)
                 
-                single_support_L = (heelStrikeR - HeelStrideL) / (strideEndL - strideStartL) * 100; % Between 3R and 3L
+                single_support_L = (heelStrikeR - heelStrikeL) / (strideEndL - strideStartL) * 100; % Between 3R and 3L
                 single_support_R = (toeOffR - toeOffL) / (strideEndR - strideStartR) * 100; % Between 4R and 4L
                 double_support_L = (toeOffL - heelStrikeR) / (strideEndL - strideStartL) * 100; % Between 3L and 4R
                 double_support_R = (toeOffL - heelStrikeR) / (strideEndR - strideStartR) * 100; % Between 3R and 4L

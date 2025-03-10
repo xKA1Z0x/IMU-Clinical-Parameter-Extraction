@@ -51,8 +51,8 @@ function [finalTableL, finalTableR] = findSequenceIndices(dataL, dataR, datanons
     end
 
     if ismember('GaitStartIdx', finalTableR.Properties.VariableNames)
-        finalTableR{:, 3} = finalTableR{:, 3} + finalTableL{1, 5}-2;
-        finalTableR{:, 4} = finalTableR{:, 4} + finalTableL{1, 5}-2;
+        finalTableR{:, 3} = finalTableR{:, 3} + finalTableR{1, 5} - 2;
+        finalTableR{:, 4} = finalTableR{:, 4} + finalTableR{1, 5} - 2;
     else
         warning('GaitStartIdx not found in finalTableR');
     end
